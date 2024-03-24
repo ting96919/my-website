@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的網站</title>
+    <style>
+        /* CSS樣式可以放在這裡 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+            /* 左對齊 */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        #about,
+        #chat {
+            display: none;
+        }
+
+        .message {
+            border: 1px solid #ccc;
+            /* 框框樣式 */
+            padding: 10px;
+            /* 框框內邊距 */
+            margin-bottom: 10px;
+            /* 框框之間的間距 */
+            white-space: pre-line;
+            /* 允許文字換行 */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>網路攻防實習</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showContent('about')">About</a></li>
+                <li><a href="#" onclick="showContent('chat')">Chat</a></li>
+                <li>參觀人數: <span id="visitorCount">0</span></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div id="about">
+            <div style="float: left;">
+                <img src="your_photo.jpg" alt="我的照片" width="200">
+                <p>這裡是我簡單的介紹。</p>
+            </div>
+            <div style="float: right;">
+                <p>Welcome!</p>
+            </div>
+            <div style="clear: both;"></div> <!-- 清除浮動 -->
+        </div>
+
+        <div id="chat">
+            <h2>留言板</h2>
+            <form id="messageForm">
+                <textarea id="message" rows="4" cols="50"></textarea><br>
+                <button type="button" onclick="submitMessage()">提交</button>
+            </form>
+            <div id="messageBoard">
+                <!-- 留言會顯示在這裡 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript代碼可以放在這裡
+        let visitorCount = 0;
+
+        function showContent(id) {
+            document.getElementById('about').style.display = 'none';
+            document.getElementById('chat').style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function submitMessage() {
+            const message = document.getElementById('message').value;
+            const messageBoard = document.getElementById('messageBoard');
+            const newMessage = document.createElement('div');
+            newMessage.classList.add('message'); // 新增框框樣式
+            newMessage.textContent = message;
+            messageBoard.appendChild(newMessage);
+            document.getElementById('message').value = '';
+        }
+
+        function updateVisitorCount() {
+            visitorCount++;
+            document.getElementById('visitorCount').textContent = visitorCount;
+        }
+
+        // 初始化訪客計數
+        updateVisitorCount();
+    </script>
+</body>
+
+</html>
