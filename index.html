@@ -27,8 +27,11 @@
             padding: 0 20px;
         }
 
+        #home,
         #about,
-        #chat {
+        #chat,
+        #createUser,
+        #users {
             display: none;
         }
 
@@ -57,10 +60,23 @@
         nav ul li a {
             color: #fff;
             text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
         }
 
         nav ul li a:hover {
             text-decoration: underline;
+        }
+
+        /* 新增一個特殊樣式來突出顯示已選取的連結 */
+        nav ul li a.active {
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* 新增間距到使用者清單項目 */
+        #userList li {
+            margin-bottom: 25px;
         }
     </style>
 </head>
@@ -70,16 +86,24 @@
         <h1>網路攻防實習</h1>
         <nav>
             <ul>
-                <li><a href="#" onclick="showContent('about')">About</a></li>
-                <li><a href="#" onclick="showContent('chat')">Chat</a></li>
-                <li>參觀人數: <span id="visitorCount">0</span></li>
+                <li><a href="#" onclick="showContent('home')" id="homeLink">Home</a></li> <!-- 新增 Home 連結 -->
+                <li><a href="#" onclick="showContent('about')" id="aboutLink">About</a></li>
+                <li><a href="#" onclick="showContent('chat')" id="chatLink">Chat</a></li>
+                <li><a href="#" onclick="showContent('createUser')" id="createUserLink">Create User</a></li>
+                <li><a href="#" onclick="showContent('users')" id="usersLink">Users</a></li>
             </ul>
         </nav>
     </header>
     <div class="container">
-        <div id="about">
+        <div id="home">
+            <div style="text-align: center;">
+                <img src="welcome.png" alt="welcome" width="350">
+            </div>
+        </div>
+
+        <div id="about" style="display: none;">
             <div style="float: left;">
-                <img src="your_photo.jpg" alt="我的照片" width="200">
+                <img src="photo.jpg" alt="我的照片" width="200">
                 <p>國立臺灣大學 電機資安所</p>
                 <p>黃梓庭</p>
             </div>
@@ -91,7 +115,7 @@
             <div style="clear: both;"></div> <!-- 清除浮動 -->
         </div>
 
-        <div id="chat">
+        <div id="chat" style="display: none;">
             <h2>留言板</h2>
             <form id="messageForm">
                 <textarea id="message" rows="4" cols="50"></textarea><br>
@@ -101,16 +125,43 @@
                 <!-- 留言會顯示在這裡 -->
             </div>
         </div>
+
+        <div id="createUser" style="display: none;">
+            <div style="text-align: center;">
+                <h2>Create an account</h2>
+                <form id="createUserForm">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username"><br><br>
+                    <button type="button" onclick="createUser()">Create</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="users" style="display: none;">
+            <ul id="userList"></ul>
+        </div>
     </div>
 
     <script>
         // JavaScript代碼可以放在這裡
         let visitorCount = 0;
+        let userIdCounter = 1; // 使用者ID計數器
+        const users = []; // 儲存使用者的數組
 
         function showContent(id) {
+            document.getElementById('home').style.display = 'none';
             document.getElementById('about').style.display = 'none';
             document.getElementById('chat').style.display = 'none';
+            document.getElementById('createUser').style.display = 'none';
+            document.getElementById('users').style.display = 'none';
             document.getElementById(id).style.display = 'block';
+
+            // 移除所有連結的 active 類
+            const links = document.querySelectorAll('nav ul li a');
+            links.forEach(link => link.classList.remove('active'));
+
+            // 新增 active 類別到目前被選取的鏈接
+            document.getElementById(id + 'Link').classList.add('active');
         }
 
         function submitMessage() {
@@ -123,13 +174,29 @@
             document.getElementById('message').value = '';
         }
 
-        function updateVisitorCount() {
-            visitorCount++;
-            document.getElementById('visitorCount').textContent = visitorCount;
+        function createUser() {
+            const username = document.getElementById('username').value;
+            const userList = document.getElementById('userList');
+            // 檢查使用者名稱是否已存在
+            let newName = username;
+            let counter = 1;
+            while (users.some(user => user.name === newName)) {
+                newName = `${username}${counter++}`;
+            }
+            // 建立使用者對象
+            const user = { "id": userIdCounter++, "name": newName };
+            // 將使用者加入陣列中
+            users.push(user);
+            // 建立使用者清單項
+            const listItem = document.createElement('li');
+            listItem.textContent = `Id: ${user.id}, Name: ${user.name}`;
+            // 將使用者清單項目新增至使用者清單中
+            userList.appendChild(listItem);
+            // 清空輸入框
+            document.getElementById('username').value = '';
         }
 
-        // 初始化訪客計數
-        updateVisitorCount();
+
     </script>
 </body>
 
